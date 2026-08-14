@@ -8,6 +8,8 @@ public class Practica1 {
     
     //arreglo representa estacionamiento
     static char [][] estacionamiento = new char [10][10];
+    //arreglo para guardar placas
+    static String[][] placas = new String [10][10];
     
     //variables 
     static int entradafila;
@@ -23,6 +25,10 @@ public class Practica1 {
     inicializarEstacionamiento();
     generarEntradaSalida();
     mostrarEstacionamiento();
+    
+    System.out.println(validarPlaca("P123ABC"));
+    System.out.println(validarPlaca("P12ABCD"));
+    System.out.println(validarPlaca("A123ABC"));
     mostrarMenu (sc);
     }
     
@@ -137,12 +143,35 @@ public class Practica1 {
     //colocar entrada y salida en estacionamiento
     estacionamiento[entradafila][entradacolumna] = 'E';
     estacionamiento[salidafila][salidacolumna] = 'S';
+    
    
         
     }
+    
+    //método para validar placa
+    public static boolean validarPlaca (String placa){
+        if (placa.length()!= 7){
+            return false;
+        }
+        if (placa.charAt(0)!= 'P'){
+            return false;
+        }
+        if (!Character.isDigit(placa.charAt(1))||
+            !Character.isDigit(placa.charAt(2))||
+            !Character.isDigit(placa.charAt(3))){
+            return false;
+        }
+        if (!Character.isUpperCase(placa.charAt(4))||
+            !Character.isUpperCase(placa.charAt(5))||
+            !Character.isUpperCase(placa.charAt(6))){
+            return false;
+    }
+    return true;
+    
    
     
 }
+    
 
 
-   
+}   
