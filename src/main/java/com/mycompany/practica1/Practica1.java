@@ -19,6 +19,8 @@ public class Practica1 {
     
     static Random random = new Random();
     
+    static final double TARIFA = 10.0;
+    
     public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     
@@ -184,6 +186,20 @@ public class Practica1 {
         
         return false;
     }
+    //método para buscar estacionamiento libre
+    public static int[]buscarespaciolibre(){
+        for (int i=1; i<9; i++) {
+            for (int j=1; j<9; j++) {
+                if (estacionamiento [i][j]== 'L'){
+                    return new int[]{i,j};
+                    
+                }
+            }
+        }
+        return null;
+    }
+    
+    
     //método para ingreso de vehículos
     public static void ingresoVehiculos(Scanner sc){
         System.out.print("Ingrese la placa del vehículo: ");
@@ -199,6 +215,24 @@ public class Practica1 {
             System.out.println("La placa ya está registrada.");
             return;
         }
+        int[] espacio = buscarespaciolibre();
+        
+        if (espacio== null){
+            System.out.println("El estacionamiento está lleno.");
+            return;
+        }
+        System.out.print("Ingrese el monto a pagar: Q");
+        double pago = sc.nextDouble();
+        sc.nextLine();
+        
+        if (pago < TARIFA){
+            System.out.println("Pago Insuficiente.");
+            return;
+        }
+        double cambio = pago - TARIFA;
+        System.out.println("Cambio: Q" + cambio);
+                
+        
         
     }
     
