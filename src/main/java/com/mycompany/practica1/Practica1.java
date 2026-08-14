@@ -2,16 +2,26 @@
 package com.mycompany.practica1;
 
  import java.util.Scanner;
+ import java.util.Random;
 
 public class Practica1 {
     
     //arreglo representa estacionamiento
     static char [][] estacionamiento = new char [10][10];
     
+    //variables 
+    static int entradafila;
+    static int entradacolumna;
+    static int salidafila;
+    static int salidacolumna;
+    
+    static Random random = new Random();
+    
     public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     
     inicializarEstacionamiento();
+    generarEntradaSalida();
     mostrarEstacionamiento();
     mostrarMenu (sc);
     }
@@ -52,5 +62,87 @@ public class Practica1 {
             System.out.println();
         } 
     }
+    //método para generar entrada y salida
+    public static void generarEntradaSalida(){
+        
+        //utilizamos random para generar la entrada y salida (laterales)
+         int ladoentrada = random.nextInt(4);
+        
+        switch (ladoentrada){
+            
+            case 0:
+                entradafila = 0;
+                entradacolumna = random.nextInt(8)+ 1;
+                break;
+            case 1: 
+                entradafila = 9;
+                entradacolumna = random.nextInt(8)+1;
+                break;
+            case 2:
+                entradafila = random.nextInt(8)+1;
+                entradacolumna= 0;
+                break;
+            case 3:
+                entradafila = random.nextInt(8)+1;
+                entradacolumna= 9;
+                break;                                
+        }
+        
+        int ladosalida = random.nextInt(4);
+        
+        switch (ladosalida){
+            
+            case 0:
+                salidafila = 0;
+                salidacolumna = random.nextInt(8)+ 1;
+                break;
+            case 1: 
+                salidafila = 9;
+                salidacolumna = random.nextInt(8)+1;
+                break;
+            case 2:
+                salidafila = random.nextInt(8)+1;
+                salidacolumna= 0;
+                break;
+            case 3:
+                salidafila = random.nextInt(8)+1;
+                salidacolumna= 9;
+                break;                                
+        }
+        //agregamos un bucle while para que la entrada y salida no puedan ser las mismas
+        while (entradafila == salidafila && entradacolumna == salidacolumna){
+            
+            ladosalida = random.nextInt(4);
+            
+           switch (ladosalida){
+               
+            case 0:
+                salidafila = 0;
+                salidacolumna = random.nextInt(8)+ 1;
+                break;
+            case 1: 
+                salidafila = 9;
+                salidacolumna = random.nextInt(8)+1;
+                break;
+            case 2:
+                salidafila = random.nextInt(8)+1;
+                salidacolumna= 0;
+                break;
+            case 3:
+                salidafila = random.nextInt(8)+1;
+                salidacolumna= 9;
+                break;  
+           }
+        }
+    //colocar entrada y salida en estacionamiento
+    estacionamiento[entradafila][entradacolumna] = 'E';
+    estacionamiento[salidafila][salidacolumna] = 'S';
+   
+        
+    }
+   
+    
+}
 
-}   
+
+   
