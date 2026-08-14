@@ -171,6 +171,36 @@ public class Practica1 {
    
     
 }
+    //método buscar placa
+    public static boolean buscarPlaca(String placa){
+        for (int i=1; i<9; i++){
+            for (int j=1; j<9; j++){
+                if (placas[i][j] != null && placas [i][j].equals(placas)){
+                    return true;
+                }
+            }
+        
+        }
+        
+        return false;
+    }
+    //método para ingreso de vehículos
+    public static void ingresoVehiculos(Scanner sc){
+        System.out.print("Ingrese la placa del vehículo: ");
+        String placa = sc.nextLine();
+        
+        if (!validarPlaca(placa)){
+            System.out.println("Placa Inválida.");
+            return;
+            
+        }
+        
+        if (buscarPlaca(placa)){
+            System.out.println("La placa ya está registrada.");
+            return;
+        }
+        
+    }
     
 
 
