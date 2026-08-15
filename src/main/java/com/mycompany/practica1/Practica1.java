@@ -20,6 +20,7 @@ public class Practica1 {
     static Random random = new Random();
     
     static final double TARIFA = 10.0;
+    static double ingresos = 0;
     
     public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
@@ -27,15 +28,16 @@ public class Practica1 {
     inicializarEstacionamiento();
     generarEntradaSalida();
     mostrarEstacionamiento();
-    
-    System.out.println(validarPlaca("P123ABC"));
-    System.out.println(validarPlaca("P12ABCD"));
-    System.out.println(validarPlaca("A123ABC"));
     mostrarMenu (sc);
+    sc.close();
     }
     
 //método para mostrar menú
     public static void mostrarMenu(Scanner sc){
+        
+        int opcion;
+        
+        do{
    
     System.out.println("======SISTEMA DE ESTACIONAMIENTO======");
     System.out.println("1. Ingrese Vehículo");
@@ -45,6 +47,39 @@ public class Practica1 {
     System.out.println("5. Mostrar ruta más corta entre entrada y salida");
     System.out.println("6. Mostrar ingresos");
     System.out.println("7. Salir");
+    
+    System.out.print("Seleccione una opción: ");
+    opcion = sc.nextInt();
+    sc.nextLine();
+    
+    switch (opcion){
+        case 1: 
+            ingresoVehiculos(sc);
+            break;
+        case 2: 
+            retirarVehiculo(sc);
+            break;
+        case 3: 
+            mostrarEstacionamiento();
+            break;
+        case 4: 
+            buscarVehiculo(sc);
+            break;
+        case 5: 
+            calcularRuta();
+            break;
+        case 6: 
+            mostrarIngresos();
+            break;
+        case 7: 
+            System.out.println("Opción inválida.");
+            break;
+        default:
+            System.out.println("opción inválida.");
+    }
+     
+    }while (opcion !=7);
+    
     }
     //método para inicializar estacionamiento
     public static void inicializarEstacionamiento(){
@@ -63,6 +98,7 @@ public class Practica1 {
     }
     //metodo para mostrar estacionamiento
     public static void mostrarEstacionamiento(){
+        System.out.println("\n=====ESTACIONAMIENTO=====");
         for (int i=0; i<10; i++){
             for(int j=0; j<10; j++){
                 System.out.print(estacionamiento[i][j]+" ");         
@@ -177,7 +213,7 @@ public class Practica1 {
     public static boolean buscarPlaca(String placa){
         for (int i=1; i<9; i++){
             for (int j=1; j<9; j++){
-                if (placas[i][j] != null && placas [i][j].equals(placas)){
+                if (placas[i][j] != null && placas [i][j].equals(placa)){
                     return true;
                 }
             }
@@ -230,11 +266,147 @@ public class Practica1 {
             return;
         }
         double cambio = pago - TARIFA;
+        
+        estacionamiento[espacio[0]][espacio[1]] = 'A';
+        placas[espacio[0]][espacio[1]] = placa;  
+        
+        ingresos += TARIFA;
+        
+        System.out.println("Vehículo ingresado correctamente.");
+        System.out.println("Placa" + placa);
+        System.out.println("Posición: ["+ espacio[0]+"]["+ espacio[1]+"]");
+        
         System.out.println("Cambio: Q" + cambio);
-                
+        mostrarEstacionamiento();
+         
         
         
+        
+    } 
+    //método buscar posición de placa
+    public static int[] buscarPosicionPlaca(String placa) {
+
+    for (int i = 1; i < 9; i++) {
+
+        for (int j = 1; j < 9; j++) {
+
+            if (placas[i][j] != null &&
+                placas[i][j].equals(placa)) {
+
+                return new int[]{i, j};
+            }
+        }
     }
+
+    return null;
+}
+    //método para retirar vehículos
+    public static void retirarVehiculo(Scanner sc) {
+
+    System.out.print("Ingrese la placa del vehículo a retirar: ");
+    String placa = sc.nextLine();
+
+    int[] posicion = buscarPosicionPlaca(placa);
+
+    if (posicion == null) {
+        System.out.println("Vehículo no encontrado.");
+        return;
+    }
+
+    int fila = posicion[0];
+    int columna = posicion[1];
+
+    estacionamiento[fila][columna] = 'L';
+    placas[fila][columna] = null;
+
+    System.out.println("Vehículo retirado correctamente.");
+    System.out.println("Placa: " + placa);
+    System.out.println("Posición liberada: [" +
+                       fila + "][" + columna + "]");
+
+    mostrarEstacionamiento();
+}
+    //método para buscar vehículos
+    public static void buscarVehiculo(Scanner sc) {
+
+    System.out.print("Ingrese la placa a buscar: ");
+    String placa = sc.nextLine();
+
+    int[] posicion = buscarPosicionPlaca(placa);
+
+    if (posicion == null) {
+        System.out.println("Vehículo no encontrado.");
+        return;
+    }
+
+    System.out.println("\nVehículo encontrado.");
+    System.out.println("Placa: " + placa);
+    System.out.println("Fila: " + posicion[0]);
+    System.out.println("Columna: " + posicion[1]);
+}
+    //Método para ver los ingresos recaudados
+    public static void mostrarIngresos() {
+
+    System.out.println("\n===== INGRESOS =====");
+    System.out.println("Ingresos acumulados: Q" + ingresos);
+}
+    public static int posicionPerimetro(int fila, int columna) {
+
+    if (fila == 0) {
+        return columna;
+    }
+
+    if (columna == 9) {
+        return 9 + fila;
+    }
+
+    if (fila == 9) {
+        return 27 - columna;
+    }
+
+    if (columna == 0) {
+        return 36 - fila;
+    }
+
+    return -1;
+}
+    //método calcula la ruta más corta para salir 
+    public static void calcularRuta() {
+        int posicionEntrada =
+        posicionPerimetro(entradafila, entradacolumna);
+
+        int posicionSalida =
+        posicionPerimetro(salidafila, salidacolumna);
+
+        int distanciaHorario =
+        (posicionSalida - posicionEntrada + 36) % 36;
+
+        int distanciaAntihorario =
+        (posicionEntrada - posicionSalida + 36) % 36;
+System.out.println("\n===== RUTAS =====");
+
+System.out.println("Distancia sentido horario: "
+                   + distanciaHorario + " posiciones");
+
+System.out.println("Distancia sentido antihorario: "
+                   + distanciaAntihorario + " posiciones");
+
+if (distanciaHorario < distanciaAntihorario) {
+
+    System.out.println("Ruta recomendada: sentido horario ("
+                       + distanciaHorario + " posiciones)");
+
+} else if (distanciaAntihorario < distanciaHorario) {
+
+    System.out.println("Ruta recomendada: sentido antihorario ("
+                       + distanciaAntihorario + " posiciones)");
+
+} else {
+
+    System.out.println("Ambas rutas tienen la misma distancia.");
+    System.out.println("Cualquiera de las dos puede utilizarse.");
+}
+   }
     
 
 
