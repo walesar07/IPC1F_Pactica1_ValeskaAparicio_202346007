@@ -97,14 +97,47 @@ public class Practica1 {
 
     }
     //metodo para mostrar estacionamiento
-    public static void mostrarEstacionamiento(){
-        System.out.println("\n=====ESTACIONAMIENTO=====");
-        for (int i=0; i<10; i++){
-            for(int j=0; j<10; j++){
-                System.out.print(estacionamiento[i][j]+" ");         
-            } 
-            System.out.println();
-        } 
+   public static void mostrarEstacionamiento() {
+
+    int libres = 0;
+    int ocupados = 0;
+
+    System.out.println("\n===== ESTACIONAMIENTO =====");
+
+    // Encabezado de columnas
+    System.out.print("    ");
+
+    for (int j = 0; j < 10; j++) {
+        System.out.printf("%3d ", j + 1);
+    }
+
+    System.out.println();
+
+    for (int i = 0; i < 10; i++) {
+
+        // Número de fila
+        System.out.printf("%3d ", i + 1);
+
+        for (int j = 0; j < 10; j++) {
+
+            System.out.printf("[%c] ", estacionamiento[i][j]);
+
+            if (estacionamiento[i][j] == 'L') {
+                libres++;
+            }
+
+            if (estacionamiento[i][j] == 'A') {
+                ocupados++;
+            }
+        }
+
+        System.out.println();
+    }
+
+    System.out.println();
+    System.out.println("Espacios libres: " + libres);
+    System.out.println("Espacios ocupados: " + ocupados);
+
     }
     //método para generar entrada y salida
     public static void generarEntradaSalida(){
@@ -257,15 +290,25 @@ public class Practica1 {
             System.out.println("El estacionamiento está lleno.");
             return;
         }
-        System.out.print("Ingrese el monto a pagar: Q");
-        double pago = sc.nextDouble();
-        sc.nextLine();
+        double pago;
+
+do {
+    System.out.print("Ingrese el monto a pagar: Q");
+    pago = sc.nextDouble();
+    sc.nextLine();
+
+    if (pago < 0) {
+        System.out.println("El monto no puede ser un número negativo.");
+    } else if (pago < TARIFA) {
+        System.out.println("Pago insuficiente. Ingrese nuevamente el monto.");
+    }
+
+} while (pago < TARIFA);
         
-        if (pago < TARIFA){
-            System.out.println("Pago Insuficiente.");
-            return;
-        }
         double cambio = pago - TARIFA;
+
+System.out.printf("Cambio: Q%.2f%n", cambio);
+        
         
         estacionamiento[espacio[0]][espacio[1]] = 'A';
         placas[espacio[0]][espacio[1]] = placa;  
@@ -305,6 +348,11 @@ public class Practica1 {
 
     System.out.print("Ingrese la placa del vehículo a retirar: ");
     String placa = sc.nextLine();
+    
+     if (!validarPlaca(placa)) {
+        System.out.println("Placa inválida.");
+        return;
+    }
 
     int[] posicion = buscarPosicionPlaca(placa);
 
@@ -321,8 +369,8 @@ public class Practica1 {
 
     System.out.println("Vehículo retirado correctamente.");
     System.out.println("Placa: " + placa);
-    System.out.println("Posición liberada: [" +
-                       fila + "][" + columna + "]");
+    System.out.println("Fila: " + fila);
+    System.out.println("Columna: " + columna);
 
     mostrarEstacionamiento();
 }
